@@ -3,8 +3,12 @@
 {% block header %}
     <div class="basic_block">
         <p>
-            Войти или зарегистрироваться или
-            <a href="{% url 'doctors_list' %}">оставить отзыв</a>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'login' %}">Войти</a> или зарегистрироваться
+            {% else %}
+                <a href="{% url 'doctors_list' %}">оставить отзыв</a> или
+                <a href="{% url 'logout' %}">выйти</a>
+            {% endif %}
         </p>
     </div>
     <br>

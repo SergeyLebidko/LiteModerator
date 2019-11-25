@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.contrib.auth.views import LoginView, LogoutView
 from .models import Review, Doctor
 
 
@@ -21,3 +23,13 @@ def add_review(request, doctor_id):
     doctor = Doctor.objects.get(pk=doctor_id)
     context = {'doctor': doctor}
     return render(request, 'main/add_review.html', context)
+
+
+# Контроллер входа на сайт
+class LoginController(LoginView):
+    template_name = 'main/login.html'
+
+
+# Контроллер выхода с сайта
+class LogoutController(LogoutView):
+    next_page = reverse_lazy('review')
