@@ -3,6 +3,7 @@
 {% block content %}
     <div class="basic_block">
         <p>
+            - данный блок будет удален -<br><br>
             Здесь будет список отзывов:<br><br>
 
             - Пользователь, который оставил отзыв<br>
@@ -10,4 +11,22 @@
             - Текст отзыва
         </p>
     </div>
+    <br>
+
+    {% for review in reviews %}
+        <div class="basic_block">
+            <p>
+                {{ review.user }}<br>
+                {{ review.doctor }}<br>
+                {{ review.doctor.specialty }}<br>
+                {{ review.finished_text }}
+            </p>
+        </div>
+    {% empty %}
+        <div class="basic_block">
+            <p>
+                Простите, но на сайте пока нет отзывов. Вы можете оставить первый)
+            </p>
+        </div>
+    {% endfor %}
 {% endblock %}

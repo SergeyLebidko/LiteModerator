@@ -27,7 +27,7 @@ class ReviewAdmin(admin.ModelAdmin):
     search_fields = ['doctor', 'user']
     fields = ['doctor', 'user', 'dt_created', 'dt_updated', 'origin_text', 'finished_text', 'moderation_flag',
               'user_ip']
-    readonly_fields = ['dt_created', 'dt_updated', 'origin_text']
+    readonly_fields = ['user', 'dt_created', 'dt_updated', 'origin_text', 'user_ip']
     list_per_page = 50
 
 

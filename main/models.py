@@ -3,8 +3,8 @@ from django.contrib.auth.models import User, AnonymousUser
 
 
 # Функция, возвращающая значение по-умолчанию для поля user модели Review
-def get_default_user_for_review_user():
-    return AnonymousUser
+def get_default_value_for_review_user():
+    return -1
 
 
 # Модель для хранения специальностей
@@ -35,7 +35,7 @@ class Doctor(models.Model):
 # Модель для хранения отзывов
 class Review(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, verbose_name='ФИО врача')
-    user = models.ForeignKey(User, default=get_default_user_for_review_user(), on_delete=models.SET_DEFAULT,
+    user = models.ForeignKey(User, default=get_default_value_for_review_user(), on_delete=models.SET_DEFAULT,
                              verbose_name='Пользователь, оставивший отзыв')
 
     dt_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата и время создания отзыва')
@@ -49,6 +49,7 @@ class Review(models.Model):
     class Meta:
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
+        ordering = ['-dt_created']
 
 
 # Модель для хранения запрещенных слов
