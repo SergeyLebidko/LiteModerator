@@ -39,7 +39,7 @@ class Review(models.Model):
                              verbose_name='Пользователь, оставивший отзыв')
 
     dt_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата и время создания отзыва')
-    dt_updated = models.DateTimeField(auto_now_add=True, verbose_name='Дата и время редактирования отзыва')
+    dt_updated = models.DateTimeField(auto_now=True, verbose_name='Дата и время редактирования отзыва')
     origin_text = models.TextField(blank=False, verbose_name='Исходный отзыв')
     finished_text = models.TextField(blank=False, verbose_name='Обработанный отзыв')
     moderation_flag = models.BooleanField(default=False, null=False, verbose_name='Отзыв отмодерирован')
