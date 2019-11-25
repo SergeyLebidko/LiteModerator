@@ -1,36 +1,75 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
+
+
+# Функция, возвращающая значение по-умолчанию для поля user модели Review
+def get_default_user_for_review_user():
+    return AnonymousUser
 
 
 # Модель для хранения специальностей
 class Specialty(models.Model):
-    spec_name = models.CharField(max_length=100, verbose_name='Специальность')
+    name = models.CharField(max_length=100, verbose_name='Специальность')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Специальность'
+        verbose_name_plural = 'Специальности'
 
 
 # Модель для хранения врачей
 class Doctor(models.Model):
     fio = models.CharField(max_length=250, verbose_name='ФИО врача')
-    spec_name = models.ManyToManyField(Specialty)
+    specialty = models.ManyToManyField(Specialty, verbose_name='Специальность врача')
+
+    def __str__(self):
+        return self.fio
+
+    class Meta:
+        verbose_name = 'ФИО врача'
+        verbose_name_plural = 'ФИО врачей'
 
 
 # Модель для хранения отзывов
 class Review(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, verbose_name='ФИО врача')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь, оставивший отзыв')
+    user = models.ForeignKey(User, default=get_default_user_for_review_user(), on_delete=models.SET_DEFAULT,
+                             verbose_name='Пользователь, оставивший отзыв')
 
-    date_and_time_review = models.DateTimeField(auto_now_add=True, verbose_name='Дата и время отзыва')
-    origin_review_text = models.TextField(blank=False, verbose_name='Исходный отзыв')
-    finished_review_text = models.TextField(blank=False, verbose_name='Обработанный отзыв')
+    dt_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата и время создания отзыва')
+    dt_updated = models.DateTimeField(auto_now_add=True, verbose_name='Дата и время редактирования отзыва')
+    origin_text = models.TextField(blank=False, verbose_name='Исходный отзыв')
+    finished_text = models.TextField(blank=False, verbose_name='Обработанный отзыв')
     moderation_flag = models.BooleanField(default=False, null=False, verbose_name='Отзыв отмодерирован')
 
-    user_ip = models.GenericIPAddressField(protocol='IPv4')
+    user_ip = models.GenericIPAddressField(protocol='IPv4', verbose_name='ip-адрес пользователя')
+
+    class Meta:
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
 
 
 # Модель для хранения запрещенных слов
 class ForbiddenWord(models.Model):
     word = models.CharField(max_length=100, verbose_name='Запрещенное слово')
 
+    def __str__(self):
+        return self.word
 
-# Модель для хранения слов исключений
+    class Meta:
+        verbose_name = 'Запрещенное слово'
+        verbose_name_plural = 'Запрещенные слова'
+
+
+# Модель для хранения слов-исключений
 class PermittedWords(models.Model):
     word = models.CharField(max_length=100, verbose_name='Слово-исключение')
+
+    def __str__(self):
+        return self.word
+
+    class Meta:
+        verbose_name = 'Слово-исключение'
+        verbose_name_plural = 'Слова-исключения'
