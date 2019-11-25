@@ -1,7 +1,7 @@
 from django.conf.urls import url
-from .views import index
+from .views import review
 
 
 urlpatterns = [
-    url('', index)
+    url('review/', review)
 ]
