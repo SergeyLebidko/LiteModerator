@@ -1,0 +1,23 @@
+{% extends 'layout/basic.html' %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <div class="basic_block">
+        <p>
+            {% if doctors %}
+                Выберите врача, о котором хотели бы оставить отзыв:<br>
+                <ul>
+                    {% for doctor in doctors %}
+                        <li>
+                            <a href="{% url 'add_review' doctor_id=doctor.pk %}">{{ doctor }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                Простите, но на сайте пока нет врачей...
+            {% endif %}
+        </p>
+    </div>
+{% endblock content %}

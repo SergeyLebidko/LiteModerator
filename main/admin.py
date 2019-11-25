@@ -20,14 +20,13 @@ class DoctorAdmin(admin.ModelAdmin):
 
 # Редактор модели для отзывов
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ['doctor', 'user', 'dt_created', 'dt_updated', 'origin_text', 'finished_text',
-                    'moderation_flag',
+    list_display = ['doctor', 'user', 'dt_created', 'dt_updated', 'origin_text', 'finished_text', 'moderation_flag',
                     'user_ip']
     list_display_links = ['doctor', 'user']
     search_fields = ['doctor', 'user']
     fields = ['doctor', 'user', 'dt_created', 'dt_updated', 'origin_text', 'finished_text', 'moderation_flag',
               'user_ip']
-    readonly_fields = ['user', 'dt_created', 'dt_updated', 'origin_text', 'user_ip']
+    readonly_fields = ['doctor', 'user', 'dt_created', 'dt_updated', 'origin_text', 'user_ip']
     list_per_page = 50
 
 

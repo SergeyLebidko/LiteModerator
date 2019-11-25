@@ -1,27 +1,32 @@
 {% extends 'layout/basic.html' %}
 
-{% block content %}
+{% block header %}
     <div class="basic_block">
         <p>
-            - данный блок будет удален -<br><br>
-            Здесь будет список отзывов:<br><br>
-
-            - Пользователь, который оставил отзыв<br>
-            - ФИО и специальность врача<br>
-            - Текст отзыва
+            Войти или зарегистрироваться или
+            <a href="{% url 'doctors_list' %}">оставить отзыв</a>
         </p>
     </div>
     <br>
+{% endblock header %}
 
+{% block content %}
     {% for review in reviews %}
         <div class="basic_block">
             <p>
                 {{ review.user }}<br>
                 {{ review.doctor }}<br>
-                {{ review.doctor.specialty }}<br>
+                Специальности врача:
+                {% for spec in review.doctor.specialty.all %}
+                    {{ spec }}
+                {% empty %}
+                    Для врача не указаны специальности...
+                {% endfor %}
+                <br>
                 {{ review.finished_text }}
             </p>
         </div>
+        <br>
     {% empty %}
         <div class="basic_block">
             <p>
@@ -29,4 +34,4 @@
             </p>
         </div>
     {% endfor %}
-{% endblock %}
+{% endblock content %}
