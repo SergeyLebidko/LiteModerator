@@ -2,10 +2,10 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 
 from .models import Review, Doctor
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, ReviewForm
 
 
 # Контроллер главной страницы
@@ -24,9 +24,30 @@ def doctors_list(request):
 
 # Контроллер добавления нового отзыва
 def add_review(request, doctor_id):
-    doctor = Doctor.objects.get(pk=doctor_id)
-    context = {'doctor': doctor}
-    return render(request, 'main/add_review.html', context)
+    # Если пользователь запросил форму
+    if request.method == 'GET':
+        doctor = Doctor.objects.get(pk=doctor_id)
+        form = ReviewForm()
+        context = {'doctor': doctor, 'form': form}
+        return render(request, 'main/add_review.html', context)
+
+    # Пользователь отправил заполненную форму
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect(reverse_lazy('success_review'))
+        else:
+            return render(request, 'main/add_review.html', {
+                'form': form
+            })
+
+    # В случае, если запрос некорректен - возвращаем страницу с ошибкой
+    return HttpResponseBadRequest('Некорректный запрос к серверу')
+
+
+# Контроллер, возвращающий страницу с сообщением об успешном добавлении отзыва
+def success_review(request):
+    return render(request, 'main/success_review_msg.html', {})
 
 
 # Контроллер регистрации нового пользователя

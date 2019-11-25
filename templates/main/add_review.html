@@ -5,8 +5,18 @@
 
 {% block content %}
     <div class="basic_block">
+        <h1>Оставить отзыв</h1>
+        <h2>{{ doctor }}</h2>
         <p>
-            Здесь будет выведена форма ввода нового отзыва о {{ doctor }}
+            <form method="post">
+                {% csrf_token %}
+                {{ form.origin_text }}<br>
+                {% if form.origin_text.errors %}
+                    {{ form.origin_text.errors }}
+                {% endif %}
+                <br><br>
+                <input type="submit" value="Отправить отзыв">
+            </form>
         </p>
     </div>
 {% endblock content %}
