@@ -6,7 +6,7 @@
 {% block content %}
     <div class="basic_block">
         <p>
-            <form method="post">
+            <form method="post" action="{% url 'user_register' %}">
                 {% csrf_token %}
                 <table>
                     {{ form.as_table }}

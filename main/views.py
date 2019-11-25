@@ -26,7 +26,10 @@ def doctors_list(request):
 def add_review(request, doctor_id):
     # Если пользователь запросил форму
     if request.method == 'GET':
-        doctor = Doctor.objects.get(pk=doctor_id)
+        try:
+            doctor = Doctor.objects.get(pk=doctor_id)
+        except Doctor.DoesNotExist:
+            HttpResponseBadRequest('Некорректный запрос к серверу')
         form = ReviewForm()
         context = {'doctor': doctor, 'form': form}
         return render(request, 'main/add_review.html', context)
