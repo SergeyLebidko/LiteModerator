@@ -23,7 +23,7 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display = ['doctor', 'user', 'dt_created', 'dt_updated', 'origin_text', 'finished_text', 'moderation_flag',
                     'user_ip']
     list_display_links = ['doctor', 'user']
-    search_fields = ['doctor', 'user']
+    search_fields = ['doctor__fio', 'user__username']
     fields = ['doctor', 'user', 'dt_created', 'dt_updated', 'origin_text', 'finished_text', 'moderation_flag',
               'user_ip']
     readonly_fields = ['doctor', 'user', 'dt_created', 'dt_updated', 'origin_text', 'user_ip']

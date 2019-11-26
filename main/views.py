@@ -24,7 +24,7 @@ def doctors_list(request):
 
 # Контроллер добавления нового отзыва
 def add_review(request, doctor_id):
-    # Если пользователь запросил форму
+    # Пользователь запросил форму
     if request.method == 'GET':
         try:
             doctor = Doctor.objects.get(pk=doctor_id)
@@ -39,6 +39,15 @@ def add_review(request, doctor_id):
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
+            # Если форма успешно проверена, то готовим данные к сохранению
+            doctor = Doctor.objects.get(pk=doctor_id)
+            new_review = form.save(commit=False)
+            new_review.doctor = doctor
+            new_review.moderation_flag = False
+            new_review.user = request.user
+            new_review.user_ip = request.META['REMOTE_ADDR']
+            # Сохраняем данные и переводим пользователя на страничку с сообщением об успехе
+            new_review.save()
             return HttpResponseRedirect(reverse_lazy('success_review'))
         else:
             return render(request, 'main/add_review.html', {
