@@ -2,17 +2,24 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
 
 from .models import Review, Doctor
 from .forms import UserRegisterForm, ReviewForm
 
 
-# Контроллер главной страницы
+# Контроллер страницы со ссылками для входа и оставления отзывов
+def index(request):
+    return render(request, 'main/index.html', {})
+
+
+# Контроллер страницы со списком отзывов
 def review(request):
-    reviews = Review.objects.all()
-    context = {'reviews': reviews}
-    return render(request, 'main/index.html', context)
+    if request.user.is_staff:
+        reviews = Review.objects.all()
+        context = {'reviews': reviews}
+        return render(request, 'main/review.html', context)
+    return Http404()
 
 
 # Контроллер списка врачей
@@ -87,4 +94,4 @@ class LoginController(LoginView):
 
 # Контроллер выхода с сайта
 class LogoutController(LogoutView):
-    next_page = reverse_lazy('review')
+    next_page = reverse_lazy('index')

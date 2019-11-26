@@ -8,7 +8,8 @@
                 <a href="{% url 'doctors_list' %}">Оставить отзыв</a> -
                 <a href="{% url 'logout' %}">Выйти</a>
                 {% if user.is_staff %}
-                    - <a href="/admin/">Перейти к администрированию отзывов</a>
+                    - <a href="/admin/">Перейти к модерации отзывов</a>
+                    - <a href="{% url 'review' %}">Перейти к списку отмодерированных отзывов</a>
                 {% endif %}
             {% else %}
                 <a href="{% url 'login' %}">Войти</a> или
@@ -17,31 +18,7 @@
         </p>
     </div>
     <br>
-{% endblock header %}
+{% endblock %}
 
 {% block content %}
-    {% for review in reviews %}
-        <div class="basic_block">
-            <p>
-                Пользователь: {{ review.user }}<br>
-                Дата отзыва: {{ review.dt_created|date:"d:m:Y" }}<br>
-                ФИО врача: {{ review.doctor }}<br>
-                Специальности врача:
-                {% for spec in review.doctor.specialty.all %}
-                    {{ spec }}
-                {% empty %}
-                    Для врача не указаны специальности...
-                {% endfor %}
-                <br><br>
-                {{ review.finished_text }}
-            </p>
-        </div>
-        <br>
-    {% empty %}
-        <div class="basic_block">
-            <p>
-                Простите, но на сайте пока нет отзывов. Вы можете оставить первый)
-            </p>
-        </div>
-    {% endfor %}
-{% endblock content %}
+{% endblock %}
