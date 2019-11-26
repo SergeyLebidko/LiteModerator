@@ -52,7 +52,7 @@ class Doctor(models.Model):
 # Модель для хранения отзывов
 class Review(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, verbose_name='ФИО врача')
-    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Пользователь, оставивший отзыв')
+    user = models.ForeignKey(User, null=True, on_delete=models.PROTECT, verbose_name='Пользователь, оставивший отзыв')
 
     dt_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата и время создания отзыва')
     dt_updated = models.DateTimeField(auto_now=True, verbose_name='Дата и время редактирования отзыва')
