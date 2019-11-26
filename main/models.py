@@ -65,7 +65,7 @@ class Review(models.Model):
     class Meta:
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
-        ordering = ['-dt_created']
+        ordering = ['dt_created']
 
     def save(self):
         # Готовим текст, который будет править модератор
