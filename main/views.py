@@ -16,8 +16,8 @@ def index(request):
 # Контроллер страницы со списком отзывов
 def review(request):
     if request.user.is_staff:
-        reviews = Review.objects.all()
-        context = {'reviews': reviews}
+        reviews_list = Review.objects.filter(moderation_flag=True)
+        context = {'reviews_list': reviews_list}
         return render(request, 'main/review.html', context)
     return Http404()
 
@@ -53,6 +53,7 @@ def add_review(request, doctor_id):
             new_review.moderation_flag = False
             new_review.user = request.user
             new_review.user_ip = request.META['REMOTE_ADDR']
+            new_review.finished_text = new_review.create_text_for_moderator()
             # Сохраняем данные и переводим пользователя на страничку с сообщением об успехе
             new_review.save()
             return HttpResponseRedirect(reverse_lazy('success_review'))
@@ -78,7 +79,7 @@ def user_register(request):
             form.save()
             new_user = authenticate(request, username=request.POST['username'], password=request.POST['password1'])
             login(request, new_user)
-            return HttpResponseRedirect(reverse_lazy('review'))
+            return HttpResponseRedirect(reverse_lazy('index'))
 
     if request.method == 'GET':
         form = UserRegisterForm()

@@ -4,7 +4,7 @@
 {% endblock header %}
 
 {% block content %}
-    {% for review in reviews %}
+    {% for review in reviews_list %}
         <div class="basic_block">
             <p>
                 Пользователь: {{ review.user }}<br>
@@ -24,7 +24,7 @@
     {% empty %}
         <div class="basic_block">
             <p>
-                Простите, но на сайте пока нет отзывов. Вы можете оставить первый)
+                Простите, но на сайте нет отмодерированных отзывов...
             </p>
         </div>
     {% endfor %}

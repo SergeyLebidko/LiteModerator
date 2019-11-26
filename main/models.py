@@ -67,7 +67,7 @@ class Review(models.Model):
         verbose_name_plural = 'Отзывы'
         ordering = ['dt_created']
 
-    def save(self):
+    def create_text_for_moderator(self):
         # Готовим текст, который будет править модератор
         review_text = self.origin_text
 
@@ -109,9 +109,7 @@ class Review(models.Model):
 
             review_text = tmp_text
 
-        # Сохраняем запись модели
-        self.finished_text = review_text
-        super().save()
+        return review_text
 
 
 # Модель для хранения запрещенных слов
