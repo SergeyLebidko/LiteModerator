@@ -7,8 +7,7 @@
     <div class="basic_block">
         <h1>Оставить отзыв</h1>
         <h2>{{ doctor }}</h2>
-        <p>
-            <form action="{% url 'add_review' doctor_id=doctor.pk %}" method="post">
+            <form action="{{ url_for_action }}" method="post">
                 {% csrf_token %}
                 {{ form.origin_text }}<br>
                 {% if form.origin_text.errors %}

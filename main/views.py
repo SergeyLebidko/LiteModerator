@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
@@ -31,7 +31,8 @@ def add_review(request, doctor_id):
         except Doctor.DoesNotExist:
             HttpResponseBadRequest('Некорректный запрос к серверу')
         form = ReviewForm()
-        context = {'doctor': doctor, 'form': form}
+        url_for_action = reverse('add_review', kwargs={'doctor_id': doctor_id})
+        context = {'doctor': doctor, 'form': form, 'url_for_action': url_for_action}
         return render(request, 'main/add_review.html', context)
 
     # Пользователь отправил заполненную форму
