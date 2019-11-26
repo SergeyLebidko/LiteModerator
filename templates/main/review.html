@@ -7,7 +7,12 @@
     {% for review in reviews_list %}
         <div class="basic_block">
             <p>
-                Пользователь: {{ review.user }}<br>
+                Пользователь:
+                {% if review.user %}
+                    {{ review.user }}<br>
+                {% else %}
+                    отзыв отправлен анонимным пользователем<br>
+                {% endif %}
                 Дата отзыва: {{ review.dt_created|date:"d:m:Y" }}<br>
                 ФИО врача: {{ review.doctor }}<br>
                 Специальности врача:

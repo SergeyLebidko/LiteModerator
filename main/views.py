@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
+from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
@@ -51,7 +52,10 @@ def add_review(request, doctor_id):
             new_review = form.save(commit=False)
             new_review.doctor = doctor
             new_review.moderation_flag = False
-            new_review.user = request.user
+            if request.user.is_authenticated:
+                new_review.user = request.user
+            else:
+                new_review.user = None
             new_review.user_ip = request.META['REMOTE_ADDR']
             new_review.finished_text = new_review.create_text_for_moderator()
             # Сохраняем данные и переводим пользователя на страничку с сообщением об успехе
