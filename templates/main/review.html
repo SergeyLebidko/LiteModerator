@@ -1,4 +1,5 @@
 {% extends 'layout/basic.html' %}
+{%  load filters %}
 
 {% block header %}
 {% endblock header %}
@@ -22,7 +23,7 @@
                     Для врача не указаны специальности...
                 {% endfor %}
                 <br><br>
-                {{ review.finished_text }}
+                {{ review.finished_text|check_wrong_words }}
             </p>
         </div>
         <br>
