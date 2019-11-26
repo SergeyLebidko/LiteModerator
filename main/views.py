@@ -15,11 +15,12 @@ def index(request):
 
 # Контроллер страницы со списком отзывов
 def review(request):
-    if request.user.is_staff:
-        reviews_list = Review.objects.filter(moderation_flag=True)
-        context = {'reviews_list': reviews_list}
-        return render(request, 'main/review.html', context)
-    return Http404()
+    if not request.user.is_staff:
+        return Http404()
+
+    reviews_list = Review.objects.filter(moderation_flag=True)
+    context = {'reviews_list': reviews_list}
+    return render(request, 'main/review.html', context)
 
 
 # Контроллер списка врачей
@@ -38,16 +39,15 @@ def add_review(request, doctor_id):
         except Doctor.DoesNotExist:
             HttpResponseBadRequest('Некорректный запрос к серверу')
         form = ReviewForm()
-        url_for_action = reverse('add_review', kwargs={'doctor_id': doctor_id})
-        context = {'doctor': doctor, 'form': form, 'url_for_action': url_for_action}
+        context = {'doctor': doctor, 'form': form}
         return render(request, 'main/add_review.html', context)
 
     # Пользователь отправил заполненную форму
     if request.method == 'POST':
         form = ReviewForm(request.POST)
+        doctor = Doctor.objects.get(pk=doctor_id)
         if form.is_valid():
             # Если форма успешно проверена, то готовим данные к сохранению
-            doctor = Doctor.objects.get(pk=doctor_id)
             new_review = form.save(commit=False)
             new_review.doctor = doctor
             new_review.moderation_flag = False
@@ -62,7 +62,7 @@ def add_review(request, doctor_id):
             return HttpResponseRedirect(reverse_lazy('success_review'))
         else:
             return render(request, 'main/add_review.html', {
-                'form': form
+                'form': form, 'doctor': doctor
             })
 
     # В случае, если запрос некорректен - возвращаем страницу с ошибкой
