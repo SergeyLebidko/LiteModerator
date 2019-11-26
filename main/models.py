@@ -1,5 +1,27 @@
 from django.db import models
 from django.contrib.auth.models import User
+from re import sub, findall
+
+# Регулярные выражения для замен символов
+replace_templates = [
+    # Блок регулярных выражений для замены идущих подряд знаков препинания
+    (r'[!]+', '!'),
+    (r'[?]+', '?'),
+    (r'[.]+', '.'),
+    (r'[,]+', ','),
+    (r'[:]+', ':'),
+    (r'[;]+', ';'),
+    (r'[-]+', '-'),
+
+    # Блок регулярных выражений, удаляющих пробелы перед знаками препинания
+    (r'\s+!', '!'),
+    (r'\s+\?', '?'),
+    (r'\s+\.', '.'),
+    (r'\s+,', ','),
+    (r'\s+:', ':'),
+    (r'\s+;', ';'),
+    (r'\s+-', '-')
+]
 
 
 # Модель для хранения специальностей
@@ -44,6 +66,52 @@ class Review(models.Model):
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
         ordering = ['-dt_created']
+
+    def save(self):
+        # Готовим текст, который будет править модератор
+        review_text = self.origin_text
+
+        # Последовательно применяем к исходному тексту регулярные выражения для упорядочивания знаков препинания
+        for regex, replacement_text in replace_templates:
+            review_text = sub(regex, replacement_text, review_text)
+
+        # Временная переменная, которая понадобиться для хранения исправляемого текста
+        tmp_text = ''
+
+        # После каждого знака препинания вставляем пробел
+        for p in review_text:
+            tmp_text += p
+            if p in '.,-?!':
+                tmp_text += ' '
+        review_text = tmp_text
+
+        # Удалаем лишние пробелы внутри текста (если они есть)
+        review_text = sub(r'[\s]+', ' ', review_text)
+
+        # Удаляем начальные и конечные пробелы (если они есть)
+        review_text = review_text.strip()
+
+        # Проверяем повторение шести или более заглавных символов и если нашли их, то исправляем текст
+        if findall(r'[А-Я]{6,}', review_text):
+            tmp_text = ''
+
+            # Переменная, которая будет хранить отдельные предложения
+            partition = ''
+
+            for p in review_text:
+                partition += p
+                if p in '.!?':
+                    if partition.startswith(' '):
+                        tmp_text += ' ' + partition.strip().capitalize()
+                    else:
+                        tmp_text += partition.strip().capitalize()
+                    partition = ''
+
+            review_text = tmp_text
+
+        # Сохраняем запись модели
+        self.finished_text = review_text
+        super().save()
 
 
 # Модель для хранения запрещенных слов
