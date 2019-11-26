@@ -25,7 +25,7 @@ def check_wrong_words(text):
         # Если слово было помечено, как матерное, то надо проверить, не является ли оно словом-исключением
         if need_mark:
             for permitted_word in permitted_words:
-                if word_for_check.lower()==str(permitted_word).lower():
+                if word_for_check.lower() == str(permitted_word).lower():
                     need_mark = False
                     break
 

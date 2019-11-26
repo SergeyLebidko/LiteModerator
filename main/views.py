@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
 
@@ -14,10 +15,8 @@ def index(request):
 
 
 # Контроллер страницы со списком отзывов
+@user_passes_test(lambda user: user.is_staff)
 def review(request):
-    if not request.user.is_staff:
-        return Http404()
-
     reviews_list = Review.objects.filter(moderation_flag=True)
     context = {'reviews_list': reviews_list}
     return render(request, 'main/review.html', context)
