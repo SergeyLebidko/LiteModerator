@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
-from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
