@@ -126,7 +126,7 @@ class ForbiddenWord(models.Model):
 
 
 # Модель для хранения слов-исключений
-class PermittedWords(models.Model):
+class PermittedWord(models.Model):
     word = models.CharField(max_length=100, verbose_name='Слово-исключение')
 
     def __str__(self):

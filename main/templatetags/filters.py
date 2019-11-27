@@ -1,6 +1,6 @@
 from django import template
 from django.utils.html import mark_safe
-from main.models import ForbiddenWord, PermittedWords
+from main.models import ForbiddenWord, PermittedWord
 from re import sub
 
 register = template.Library()
@@ -8,7 +8,7 @@ register = template.Library()
 
 def check_wrong_words(text):
     forbidden_words = ForbiddenWord.objects.all()
-    permitted_words = PermittedWords.objects.all()
+    permitted_words = PermittedWord.objects.all()
 
     output_text = ''
 

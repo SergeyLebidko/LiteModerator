@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Specialty, Doctor, Review, ForbiddenWord, PermittedWords
+from .models import Specialty, Doctor, Review, ForbiddenWord, PermittedWord
 
 
 # Редактор модели специальностей
@@ -50,4 +50,4 @@ admin.site.register(Specialty, SpecialtyAdmin)
 admin.site.register(Doctor, DoctorAdmin)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(ForbiddenWord, ForbiddenWordsAdmin)
-admin.site.register(PermittedWords, PermittedWordsAdmin)
+admin.site.register(PermittedWord, PermittedWordsAdmin)
