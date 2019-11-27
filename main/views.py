@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 
 from .models import Review, Doctor
 from .forms import UserRegisterForm, ReviewForm
@@ -31,13 +31,15 @@ def doctors_list(request):
 
 # Контроллер добавления нового отзыва
 def add_review(request, doctor_id):
+    doctor = get_object_or_404(Doctor, **{'pk': doctor_id})
+
     # Пользователь запросил форму
     if request.method == 'GET':
-        return handle_get_method_for_add_review(request, doctor_id)
+        return handle_get_method_for_add_review(request, doctor)
 
     # Пользователь отправил заполненную форму
     if request.method == 'POST':
-        return handle_post_method_for_add_review(request, doctor_id)
+        return handle_post_method_for_add_review(request, doctor)
 
     # В случае, если запрос некорректен - возвращаем страницу с ошибкой
     return HttpResponseBadRequest('Некорректный запрос к серверу')
@@ -76,22 +78,16 @@ class LogoutController(LogoutView):
 
 
 # Функция для обработки GET-запросов в контроллере добавления отзыва
-def handle_get_method_for_add_review(request, doctor_id):
-    try:
-        doctor = Doctor.objects.get(pk=doctor_id)
-    except Doctor.DoesNotExist:
-        HttpResponseBadRequest('Некорректный запрос к серверу')
+def handle_get_method_for_add_review(request, doctor):
     form = ReviewForm()
     context = {'doctor': doctor, 'form': form}
     return render(request, 'main/add_review.html', context)
 
 
 # Функция для обрботки POST-запросов в контроллере добавления отзыва
-def handle_post_method_for_add_review(request, doctor_id):
-    form = ReviewForm(request.POST)
-    doctor = Doctor.objects.get(pk=doctor_id)
-
+def handle_post_method_for_add_review(request, doctor):
     # Проверяем форму. Если она не валидна, то выводим страницу ввода отзыва ещё раз
+    form = ReviewForm(request.POST)
     if not form.is_valid():
         return render(request, 'main/add_review.html', {
             'form': form, 'doctor': doctor
@@ -103,8 +99,6 @@ def handle_post_method_for_add_review(request, doctor_id):
     new_review.moderation_flag = False
     if request.user.is_authenticated:
         new_review.user = request.user
-    else:
-        new_review.user = None
     new_review.user_ip = request.META['REMOTE_ADDR']
     new_review.finished_text = new_review.create_text_for_moderator()
 
