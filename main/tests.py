@@ -45,7 +45,8 @@ class TestReviewModel(TestCase):
             )
 
     def test_finished_text_creation(self):
-        for key in range(1, len(test_texts_for_review_model) + 1):
+        count_texts = len(test_texts_for_review_model)
+        for key in range(1, count_texts + 1):
             review = Review.objects.get(pk=key)
             self.assertEqual(review.create_text_for_moderator(), test_texts_for_review_model[key - 1][1])
 
@@ -65,5 +66,5 @@ class TestFilter(TestCase):
     def test_filter(self):
         for text, wrong_words in test_texts_for_filter:
             text_after_filter = check_wrong_words(text)
-            find_wrong_words = findall(r'<font color="red">(.*?)</font>', text_after_filter, DOTALL)
+            find_wrong_words = findall(r'<font color="red">(.*?)</font>', text_after_filter)
             self.assertEqual(wrong_words, find_wrong_words)
