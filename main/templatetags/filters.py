@@ -5,11 +5,11 @@ from re import sub
 
 register = template.Library()
 
+forbidden_list = ForbiddenWord.objects.all().values('word')
+permitted_list = PermittedWord.objects.all().values('word')
+
 
 def check_wrong_words(text):
-    forbidden_list = ForbiddenWord.objects.all().values('word')
-    permitted_list = PermittedWord.objects.all().values('word')
-
     output_text = ''
 
     # Разбиваем исходный текст на отдельные элементы (для разбиения используется пробел)
