@@ -7,41 +7,47 @@ register = template.Library()
 
 
 def check_wrong_words(text):
-    forbidden_words = ForbiddenWord.objects.all()
-    permitted_words = PermittedWord.objects.all()
+    forbidden_list = ForbiddenWord.objects.all().values('word')
+    permitted_list = PermittedWord.objects.all().values('word')
 
     output_text = ''
 
+    # Разбиваем исходный текст на отдельные элементы (для разбиения используется пробел)
     for word in text.split():
+
+        # Из каждого элемента выделяем часть, которая состоит только из букв (т.е. отбрасываем знаки препинания)
         word_for_check = sub(r'[^\w]+', '', word)
 
-        # Если флаг ниже равен True, то предполагаем, что слово помечать не нужно
+        # Проверяем, нужно ли помечать слово, как матерное
         need_mark = False
-        for forbidden_word in forbidden_words:
-            if word_for_check.lower().find(str(forbidden_word).lower()) != (-1):
-                need_mark = True
-                break
-
-        # Если слово было помечено, как матерное, то надо проверить, не является ли оно словом-исключением
-        if need_mark:
-            for permitted_word in permitted_words:
-                if word_for_check.lower() == str(permitted_word).lower():
-                    need_mark = False
-                    break
+        if check_word_for_forbidden(word_for_check, forbidden_list):
+            need_mark = not check_word_for_permitted(word_for_check, permitted_list)
 
         # В зависимости от значения флага, помечаем или не помечаем слово
         # Знаки препинания в любом случае остаются не помеченнными
         if need_mark:
             t = word.partition(word_for_check)
-            output_text += t[0]+'<font color="red">'+t[1]+'</font>'+t[2]+' '
+            output_text += '<font color="red">'+t[1]+'</font>'+t[2]+' '
             continue
 
         output_text += word+' '
 
-    # Удаляем лишний конечный пробел
-    output_text = output_text.rstrip()
+    # Возвращаем подготовленную строку
+    return mark_safe(output_text.rstrip())
 
-    return mark_safe(output_text)
+
+# Функция возвращает True, если слово содержит корень из перечня корней матерных слов
+def check_word_for_forbidden(word, forbidden_list):
+    for forbidden in forbidden_list:
+        if forbidden['word'].lower() in word.lower():
+            return True
+
+
+# Функция возвращает True, если слово является словом исключением
+def check_word_for_permitted(word, permitted_list):
+    for permitted in permitted_list:
+        if word.lower() == permitted['word'].lower():
+            return True
 
 
 # Регистрируем фильтр
