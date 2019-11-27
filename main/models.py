@@ -47,6 +47,9 @@ class Doctor(models.Model):
     class Meta:
         verbose_name = 'ФИО врача'
         verbose_name_plural = 'ФИО врачей'
+        indexes = [
+            models.Index(fields=['id', 'fio'])
+        ]
 
 
 # Модель для хранения отзывов
