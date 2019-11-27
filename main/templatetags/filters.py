@@ -19,9 +19,7 @@ def check_wrong_words(text):
         word_for_check = sub(r'[^\w]+', '', word)
 
         # Проверяем, нужно ли помечать слово, как матерное
-        need_mark = False
-        if check_word_for_forbidden(word_for_check, forbidden_list):
-            need_mark = not check_word_for_permitted(word_for_check, permitted_list)
+        need_mark = check_word_for_forbidden(word_for_check) and not check_word_for_permitted(word_for_check)
 
         # В зависимости от значения флага, помечаем или не помечаем слово
         # Знаки препинания в любом случае остаются не помеченнными
@@ -37,14 +35,14 @@ def check_wrong_words(text):
 
 
 # Функция возвращает True, если слово содержит корень из перечня корней матерных слов
-def check_word_for_forbidden(word, forbidden_list):
+def check_word_for_forbidden(word):
     for forbidden in forbidden_list:
         if forbidden['word'].lower() in word.lower():
             return True
 
 
 # Функция возвращает True, если слово является словом исключением
-def check_word_for_permitted(word, permitted_list):
+def check_word_for_permitted(word):
     for permitted in permitted_list:
         if word.lower() == permitted['word'].lower():
             return True
