@@ -66,10 +66,15 @@ class Review(models.Model):
 
     user_ip = models.GenericIPAddressField(protocol='IPv4', verbose_name='ip-адрес пользователя')
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     if not self.finished_text:
+    #         self.finished_text = self.create_text_for_moderator()
+
+    def save(self):
         if not self.finished_text:
             self.finished_text = self.create_text_for_moderator()
+        super().save()
 
     def __str__(self):
         username = ('. Пользователь: ' + self.user.username) if self.user else '. Отзыв оставлен анонимно'
