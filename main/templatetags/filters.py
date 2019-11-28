@@ -5,8 +5,8 @@ from re import sub
 
 register = template.Library()
 
-forbidden_list = ForbiddenWord.objects.values_list('word')
-permitted_list = PermittedWord.objects.values_list('word')
+forbidden_list = ForbiddenWord.objects.values_list('word', flat=True)
+permitted_list = PermittedWord.objects.values_list('word', flat=True)
 
 
 def check_wrong_words(text):
@@ -37,14 +37,14 @@ def check_wrong_words(text):
 # Функция возвращает True, если слово содержит корень из перечня корней матерных слов
 def check_word_for_forbidden(word):
     for forbidden in forbidden_list:
-        if forbidden[0].lower() in word.lower():
+        if forbidden.lower() in word.lower():
             return True
 
 
 # Функция возвращает True, если слово является словом исключением
 def check_word_for_permitted(word):
     for permitted in permitted_list:
-        if word.lower() == permitted[0].lower():
+        if word.lower() == permitted.lower():
             return True
 
 

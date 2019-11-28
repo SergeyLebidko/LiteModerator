@@ -17,8 +17,9 @@ def index(request):
 # Контроллер страницы со списком отзывов
 @user_passes_test(lambda user: user.is_staff)
 def review(request):
-    reviews_list = Review.objects.select_related('doctor', 'user').filter(moderation_flag=True)
-    context = {'reviews_list': reviews_list}
+    reviews = Review.objects.select_related('doctor', 'user').prefetch_related('doctor__specialty').filter(
+        moderation_flag=True)
+    context = {'reviews': reviews}
     return render(request, 'main/review.html', context)
 
 
