@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
 
-class Hello(BaseCommand):
+class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        print('Hell World!')
+        print('Hello World!')
