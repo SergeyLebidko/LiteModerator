@@ -1,5 +1,5 @@
 from django.test import TestCase
-from re import findall, DOTALL
+from re import findall
 
 from .models import Review, Doctor, Specialty, ForbiddenWord, PermittedWord
 from .templatetags.filters import check_wrong_words
