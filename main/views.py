@@ -107,7 +107,6 @@ def handle_post_method_for_add_review(request, doctor):
     if request.user.is_authenticated:
         new_review.user = request.user
     new_review.user_ip = request.META['REMOTE_ADDR']
-    new_review.finished_text = new_review.create_text_for_moderator()
 
     # Сохраняем данные и переводим пользователя на страничку с сообщением об успехе
     new_review.save()
