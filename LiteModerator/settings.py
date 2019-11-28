@@ -26,7 +26,7 @@ SECRET_KEY = '+2#-@g-&tbgz2o7sy53fmr8not(h%%cw+u%k(&*jagtc!znzp0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
 
 
 # Application definition
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
-    # 'shoogie',
+    'shoogie',
     'main.apps.MainConfig'
 ]
 
@@ -131,33 +131,33 @@ INTERNAL_IPS = [
 
 SHOW_TOOLBAR_CALLBACK = True
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'filters': {
-#         'require_debug_false': {
-#             '()': 'django.utils.log.RequireDebugFalse',
-#         },
-#     },
-#     'handlers': {
-#         # THIS IS THE HANDLER TO ADD #
-#         'shoogie': {
-#             'level': 'ERROR',
-#             'filters': ['require_debug_false'],
-#             'class': 'shoogie.log_handler.DatabaseLogHandler',
-#         },
-#         'mail_admins': {
-#             'level': 'ERROR',
-#             'filters': ['require_debug_false'],
-#             'class': 'django.utils.log.AdminEmailHandler',
-#         },
-#     },
-#     'loggers': {
-#         'django.request': {
-#             # THIS IS WHERE TO SPECIFY THE NEW SHOOGIE HANDLER #
-#             'handlers': ['shoogie', 'mail_admins'],
-#             'level': 'ERROR',
-#             'propagate': True,
-#         },
-#     },
-# }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'handlers': {
+        # THIS IS THE HANDLER TO ADD #
+        'shoogie': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'shoogie.log_handler.DatabaseLogHandler',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            # THIS IS WHERE TO SPECIFY THE NEW SHOOGIE HANDLER #
+            'handlers': ['shoogie', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}

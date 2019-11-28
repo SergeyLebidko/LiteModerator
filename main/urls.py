@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'user_register/', user_register, name='user_register'),
     url(r'login/', LoginController.as_view(), name='login'),
     url(r'logout/', LogoutController.as_view(), name='logout'),
-    url(r'success_review_msg/', success_review, name='success_review')
+    url(r'success_review_msg/', success_review, name='success_review'),
 ]
