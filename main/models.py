@@ -71,10 +71,10 @@ class Review(models.Model):
     #     if not self.finished_text:
     #         self.finished_text = self.create_text_for_moderator()
 
-    def save(self):
+    def save(self, **kwargs):
         if not self.finished_text:
             self.finished_text = self.create_text_for_moderator()
-        super().save()
+        super().save(**kwargs)
 
     def __str__(self):
         username = ('. Пользователь: ' + self.user.username) if self.user else '. Отзыв оставлен анонимно'
