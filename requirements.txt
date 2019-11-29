@@ -1,6 +1,6 @@
 Click==7.0
 croniter==0.3.30
-Django==1.11
+Django==1.11.23
 django-debug-toolbar==2.1
 django-rq==2.1.0
 django-shoogie==0.97
