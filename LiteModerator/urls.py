@@ -20,5 +20,6 @@ import debug_toolbar
 urlpatterns = [
     url('admin/', admin.site.urls),
     url('', include('main.urls')),
-    url(r'^__debug__/', include(debug_toolbar.urls))
+    url(r'^__debug__/', include(debug_toolbar.urls)),
+    url(r'^django-rq/', include('django_rq.urls'))
 ]

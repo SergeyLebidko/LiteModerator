@@ -1,0 +1,14 @@
+Click==7.0
+croniter==0.3.30
+Django==1.11
+django-debug-toolbar==2.1
+django-rq==2.1.0
+django-shoogie==0.97
+future==0.18.2
+python-dateutil==2.8.1
+pytz==2019.3
+redis==3.3.11
+rq==1.1.0
+rq-scheduler==0.9.1
+six==1.13.0
+sqlparse==0.3.0

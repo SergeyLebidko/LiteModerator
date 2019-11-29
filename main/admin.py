@@ -12,7 +12,7 @@ class SpecialtyAdmin(admin.ModelAdmin):
 
 # Редактор модели врачей
 class DoctorAdmin(admin.ModelAdmin):
-    list_display = ['fio']
+    list_display = ['id', 'fio']
     list_display_links = ['fio']
     search_fields = ['fio']
     list_per_page = 50
@@ -26,8 +26,9 @@ class ReviewAdmin(admin.ModelAdmin):
     search_fields = ['doctor__fio', 'user__username']
     fields = ['doctor', 'user', 'dt_created', 'dt_updated', 'origin_text', 'finished_text', 'moderation_flag',
               'user_ip']
-    readonly_fields = ['doctor', 'user', 'dt_created', 'dt_updated', 'origin_text', 'user_ip']
+    readonly_fields = ['user', 'dt_created', 'dt_updated', 'origin_text', 'user_ip']
     list_per_page = 50
+    raw_id_fields = ['doctor']
 
 
 # Редактор модели для запрещенных слов

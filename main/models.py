@@ -50,6 +50,7 @@ class Doctor(models.Model):
         indexes = [
             models.Index(fields=['id', 'fio'])
         ]
+        ordering = ['fio']
 
 
 # Модель для хранения отзывов
